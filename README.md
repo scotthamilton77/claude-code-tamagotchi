@@ -47,7 +47,8 @@ bun add -g claude-code-tamagotchi
 {
   "statusLine": {
     "type": "command",
-    "command": "bunx claude-code-tamagotchi statusline"
+    "command": "bunx claude-code-tamagotchi statusline",
+    "padding": 0
   }
 }
 
@@ -96,7 +97,8 @@ bun install
 {
   "statusLine": {
     "type": "command",
-    "command": "cd '/path/to/claude-code-tamagotchi' && bun run --silent src/index.ts"
+    "command": "cd '/path/to/claude-code-tamagotchi' && bun run --silent src/index.ts",
+    "padding": 0
   }
 }
 
@@ -196,7 +198,8 @@ Your Tamagotchi is fully customizable through environment variables! Set these i
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PET_SHOW_DIRECTORY` | `true` | Show current directory in statusline |
-| `PET_SHOW_SESSION` | `true` | Show session update counter |
+| `PET_SHOW_SESSION` | `false` | Show session update counter |
+| `PET_SHOW_MODEL` | `false` | Show Claude model name in statusline |
 
 #### ⏱️ Decay Rates (How Fast Stats Drop)
 | Variable | Default | Description |

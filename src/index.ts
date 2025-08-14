@@ -68,7 +68,7 @@ async function main() {
     const thought = engine.getCurrentThought();
     
     // Build statusline output
-    // Format: [Pet Display] | [Stats] | [Directory] | [Message or Thought]
+    // Format: [Pet Display] | [Stats] | [Directory] | [Model] | [Message or Thought]
     let output = `${petDisplay} | ${stats}`;
     
     // Add directory if enabled
@@ -77,6 +77,12 @@ async function main() {
       const dirName = path.basename(cwd);
       const shortDir = dirName.length > 20 ? dirName.substring(0, 17) + '...' : dirName;
       output += ` | 📁 ${shortDir}`;
+    }
+    
+    // Add model name if enabled
+    const showModel = process.env.PET_SHOW_MODEL === 'true';
+    if (showModel && input?.model?.display_name) {
+      output += ` | 🤖 ${input.model.display_name}`;
     }
     
     // Prioritize system messages over thoughts
