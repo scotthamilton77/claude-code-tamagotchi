@@ -54,7 +54,22 @@ bun add -g claude-code-tamagotchi
 # That's it! Your pet is alive! 🎉
 ```
 
-#### Option 2: Clone & Auto-Setup
+**⚠️ Note:** npm/bun global install gives you:
+- ✅ Pet in statusline  
+- ✅ CLI commands (`claude-code-tamagotchi feed pizza`)
+- ❌ NO slash commands in Claude Code
+
+**Want slash commands too?** Add them with:
+```bash
+# Quick one-liner to add slash commands
+git clone https://github.com/Ido-Levi/claude-code-tamagotchi.git /tmp/claude-pet && \
+cp -r /tmp/claude-pet/claude-commands/* ~/.claude/commands/ && \
+rm -rf /tmp/claude-pet
+
+# Now you can use /pet-feed, /pet-play, etc. in Claude Code!
+```
+
+#### Option 2: Clone & Auto-Setup (Full Features)
 ```bash
 # Clone the repository
 git clone https://github.com/Ido-Levi/claude-code-tamagotchi.git
