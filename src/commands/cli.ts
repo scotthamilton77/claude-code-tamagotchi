@@ -7,11 +7,21 @@ const args = process.argv.slice(3).join(' ');
 
 async function main() {
   if (!command) {
-    console.log('Usage: pet <command> [args]');
+    console.log('Usage: claude-code-tamagotchi <command> [args]');
+    console.log('Run "claude-code-tamagotchi help" for available commands');
     return;
   }
   
-  const response = await CommandProcessor.processCommand(`/${command} ${args}`);
+  // Convert CLI command to slash command format expected by CommandProcessor
+  // Special handling for commands that need "pet-" prefix
+  let slashCommand: string;
+  if (command === 'name' || command === 'reset' || command === 'stats' || command === 'status' || command === 'help') {
+    slashCommand = `/pet-${command} ${args}`.trim();
+  } else {
+    // Commands like feed, play, pet, clean, sleep, wake are used without "pet-" prefix
+    slashCommand = `/${command} ${args}`.trim();
+  }
+  const response = await CommandProcessor.processCommand(slashCommand);
   console.log(response);
 }
 

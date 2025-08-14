@@ -25,27 +25,69 @@ Picture this: It's 2am. You're deep in a debugging session. Suddenly, your pet p
 
 That's your Claude Code Tamagotchi - part companion, part life coach, all friend.
 
-## Quick Start (Literally 2 Steps) 🚀
+## Quick Start 🚀
 
 ### What You Need
 - [Claude Code](https://claude.ai/code) - Your AI coding companion
 - [Bun](https://bun.sh) - The fast JavaScript runtime (`curl -fsSL https://bun.sh/install | bash`)
 - A heart ready for pet ownership
 
-### Installation
+### Installation Options
 
-1. **Clone & Enter the Pet Shop**
+#### Option 1: Global Install (Easiest!)
 ```bash
+# Install globally with bun
+bun add -g github:Ido-Levi/claude-code-tamagotchi
+
+# Update your Claude Code settings.json:
+# ~/.claude/settings.json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "bunx claude-code-tamagotchi statusline"
+  }
+}
+
+# That's it! Your pet is alive! 🎉
+```
+
+#### Option 2: Clone & Auto-Setup
+```bash
+# Clone the repository
 git clone https://github.com/Ido-Levi/claude-code-tamagotchi.git
 cd claude-code-tamagotchi
-```
 
-2. **Run Setup (It Does Everything!)**
-```bash
+# Run the magical setup script
 ./setup.sh
+# This will:
+# - Install dependencies
+# - Set up all /pet-* commands
+# - Configure your statusline (with your permission)
+# - Get your pet ready to play!
 ```
 
-That's it. Seriously. Your pet is now alive and waiting in your statusline! 
+#### Option 3: Manual Setup (For Control Freaks 💪)
+```bash
+# Clone and install
+git clone https://github.com/Ido-Levi/claude-code-tamagotchi.git
+cd claude-code-tamagotchi
+bun install
+
+# Update your Claude Code settings.json manually:
+# ~/.claude/settings.json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "cd '/path/to/claude-code-tamagotchi' && bun run --silent src/index.ts"
+  }
+}
+
+# Optional: Copy command files for /pet-* commands
+cp -r claude-commands/* ~/.claude/commands/
+# Then update paths in each command file to point to your clone location
+```
+
+That's it! Your pet is now alive and waiting in your statusline! 
 
 ## Meeting Your New Friend 🐕
 
@@ -53,24 +95,43 @@ Your pet comes with emotions, needs, and approximately 200+ different thoughts a
 
 ### The Care Commands
 
-All commands start with `/pet-` because, well, it's a pet!
+You can interact with your pet in THREE ways:
 
-**Essential Care:**
-- `/pet-feed pizza` - Feed your hungry friend (try: pizza, cookie, sushi, apple)
-- `/pet-play ball` - Playtime! (try: ball, frisbee, puzzle, laser)
-- `/pet-pet` - Give pets and scritches (+happiness)
-- `/pet-clean` - Bath time (watch for cute bath thoughts!)
+#### 1. Slash Commands in Claude Code
+All commands start with `/pet-` when used in Claude Code:
+- `/pet-feed pizza` - Feed your hungry friend
+- `/pet-play ball` - Playtime!
+- `/pet-pet` - Give pets and scritches
+- `/pet-clean` - Bath time
 - `/pet-sleep` - Tuck them in for a nap
 - `/pet-wake` - Wakey wakey!
-
-**Getting Info:**
-- `/pet-status` - Quick health check
 - `/pet-stats` - Full report with care suggestions
 - `/pet-name Buddy` - Give your pet their perfect name
-
-**Help:**
 - `/pet-help` - See all commands
 - `/pet-reset` - Start over with a new pet (careful!)
+
+#### 2. CLI Commands (from any terminal!)
+If you installed globally, you can run commands from ANY terminal:
+```bash
+# Feed your pet
+claude-code-tamagotchi feed pizza
+
+# Play with your pet
+claude-code-tamagotchi play ball
+
+# Check stats
+claude-code-tamagotchi stats
+
+# Give pets
+claude-code-tamagotchi pet
+
+# Name your pet
+claude-code-tamagotchi name "Mr. Fluffkins"
+```
+
+#### 3. Food & Toy Options
+**Foods:** pizza, cookie, sushi, apple, burger, donut, ramen, taco, ice_cream, salad
+**Toys:** ball, frisbee, puzzle, laser, rope, bubbles, feather, mouse_toy
 
 ### Understanding Your Pet's Mood
 
