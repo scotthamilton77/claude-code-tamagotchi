@@ -1,8 +1,9 @@
 {
   "name": "claude-code-tamagotchi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A virtual pet that lives in your Claude Code statusline",
-  "main": "src/index.ts",
+  "type": "module",
+  "main": "dist/index.js",
   "bin": {
     "claude-code-tamagotchi": "./bin/claude-code-tamagotchi"
   },
@@ -10,7 +11,7 @@
     "start": "bun run src/index.ts",
     "demo": "bun run scripts/demo.ts",
     "reset": "bun run scripts/reset-pet.ts",
-    "build": "bun build src/index.ts --outdir=dist --target=node",
+    "build": "bun build src/index.ts --outdir=dist --target=node && bun build src/commands/cli.ts --outdir=dist/commands --target=node",
     "dev": "bun run --watch src/index.ts",
     "prepublishOnly": "bun run build"
   },
