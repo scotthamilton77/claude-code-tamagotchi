@@ -6,7 +6,7 @@ Hey! Welcome to Claude Code Tamagotchi - a digital friend that lives in your Cla
 
 <!-- Demo GIF -->
 <div align="center">
-  <img src="first_vid.gif" alt="Claude Code Tamagotchi Demo" width="800">
+  <img src="demo.gif" alt="Claude Code Tamagotchi Demo" width="800">
 </div>
 
 ## What's This All About? 🎮
@@ -199,7 +199,7 @@ Your Tamagotchi is fully customizable through environment variables! Set these i
 |----------|---------|-------------|
 | `PET_SHOW_DIRECTORY` | `true` | Show current directory in statusline |
 | `PET_SHOW_SESSION` | `false` | Show session update counter |
-| `PET_SHOW_MODEL` | `false` | Show Claude model name in statusline |
+| `PET_SHOW_MODEL` | `true` | Show Claude model name in statusline |
 
 #### ⏱️ Decay Rates (How Fast Stats Drop)
 | Variable | Default | Description |

@@ -79,8 +79,8 @@ async function main() {
       output += ` | 📁 ${shortDir}`;
     }
     
-    // Add model name if enabled
-    const showModel = process.env.PET_SHOW_MODEL === 'true';
+    // Add model name if enabled (default: true)
+    const showModel = process.env.PET_SHOW_MODEL !== 'false';
     if (showModel && input?.model?.display_name) {
       output += ` | 🤖 ${input.model.display_name}`;
     }
