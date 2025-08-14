@@ -1,9 +1,9 @@
 ---
-description: Wake up your pet
+description: Wake up your sleeping pet
 ---
 
-Rise and shine! ☀️
+Wake up the pet:
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts /wake
+!claude-code-tamagotchi wake
 
-Your pet is ready for a new day!
+Then report: "Your pet is awake! ...sort of. They're doing that thing where they're technically awake but still 90% asleep. Give them a minute, they're not a morning pet. ☀️🥱"

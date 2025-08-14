@@ -1,9 +1,9 @@
 ---
-description: Feed your pet (cookie, pizza, sushi, apple, carrot, steak, fish, candy)
+description: Feed your pet (pizza, cookie, sushi, apple, burger, donut, ramen, taco)
 ---
 
-Let's feed your pet! 🍽️
+Feed the pet using this command:
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts "/feed $ARGUMENTS"
+!claude-code-tamagotchi feed $ARGUMENTS
 
-Your pet is enjoying the meal!
+Then tell the user something fun like: "Your pet just devoured that $ARGUMENTS like it was their last meal! They're doing a little happy dance now... or maybe that's just indigestion? 🍕💃"

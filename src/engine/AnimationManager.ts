@@ -82,8 +82,8 @@ export class AnimationManager {
       }
     }
     
-    // Debug logging
-    if (config.debugMode) {
+    // Debug logging (only if logging is enabled)
+    if (config.enableLogging && config.debugMode) {
       const fs = require('fs');
       fs.appendFileSync('/tmp/pet-animation.log', 
         `Mood: ${state.currentMood}, Breathing: ${state.breathingState}, Display: ${petDisplay}\n`);

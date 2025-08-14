@@ -53,6 +53,7 @@ export interface Config {
   // Debug
   debugMode: boolean;
   verboseLogging: boolean;
+  enableLogging: boolean;
 }
 
 export const config: Config = {
@@ -91,6 +92,7 @@ export const config: Config = {
   // Debug
   debugMode: process.env.DEBUG_MODE === 'true',
   verboseLogging: process.env.VERBOSE_LOGGING === 'true',
+  enableLogging: process.env.ENABLE_LOGGING === 'true',  // Off by default
 };
 
 export function getWeatherEffects() {

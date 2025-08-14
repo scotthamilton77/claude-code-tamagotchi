@@ -21,10 +21,12 @@ interface StatusLineInput {
 
 async function main() {
   try {
-    // Log that we've been called with animation details
-    const timestamp = Date.now();
-    const logMessage = `Called at ${new Date().toISOString()} (${timestamp})\n`;
-    fs.appendFileSync('/tmp/pet-calls.log', logMessage);
+    // Log that we've been called with animation details (only if logging enabled)
+    if (config.enableLogging) {
+      const timestamp = Date.now();
+      const logMessage = `Called at ${new Date().toISOString()} (${timestamp})\n`;
+      fs.appendFileSync('/tmp/pet-calls.log', logMessage);
+    }
     
     // Read input from stdin (Claude Code provides this)
     let input: StatusLineInput | null = null;
@@ -88,7 +90,7 @@ async function main() {
     console.log(output);
     
     // Debug logging if enabled
-    if (config.debugMode && config.logFile) {
+    if (config.enableLogging && config.debugMode && config.logFile) {
       const fs = await import('fs');
       const logEntry = {
         timestamp: new Date().toISOString(),

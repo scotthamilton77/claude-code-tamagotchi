@@ -156,8 +156,22 @@ export class StateManager {
     };
   }
   
-  private async waitForLock(maxAttempts = 3): Promise<boolean> {
+  private async waitForLock(maxAttempts = 2): Promise<boolean> {
     for (let i = 0; i < maxAttempts; i++) {
+      // Check if lock file exists and is stale (older than 2 seconds)
+      if (fs.existsSync(this.lockFile)) {
+        try {
+          const stats = fs.statSync(this.lockFile);
+          const age = Date.now() - stats.mtimeMs;
+          if (age > 2000) {
+            // Stale lock, remove it
+            fs.unlinkSync(this.lockFile);
+          }
+        } catch {
+          // Ignore errors checking lock file
+        }
+      }
+      
       if (!fs.existsSync(this.lockFile)) {
         try {
           fs.writeFileSync(this.lockFile, process.pid.toString());
@@ -167,10 +181,9 @@ export class StateManager {
         }
       }
       
-      // Only wait if this isn't the last attempt
+      // Only wait if this isn't the last attempt (max 20ms wait)
       if (i < maxAttempts - 1) {
-        // Much shorter wait time - max 40ms
-        await new Promise(resolve => setTimeout(resolve, Math.min(Math.pow(2, i) * 10, 40)));
+        await new Promise(resolve => setTimeout(resolve, 20));
       }
     }
     return false;
@@ -255,20 +268,21 @@ export class StateManager {
   }
   
   async save(state: PetState): Promise<void> {
+    // Ensure the directory exists FIRST
+    const dir = path.dirname(this.stateFile);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    
     const locked = await this.waitForLock();
     if (!locked) {
+      // Still try to save even without lock - better than losing data
       if (config.debugMode) {
-        console.error('Failed to acquire lock for saving');
+        console.error('Warning: Saving without lock');
       }
-      return;
     }
     
     try {
-      // Ensure the directory exists
-      const dir = path.dirname(this.stateFile);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
       
       // Update timestamp
       state.lastUpdate = Date.now();

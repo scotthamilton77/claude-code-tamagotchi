@@ -1,9 +1,9 @@
 ---
-description: Play with your pet (ball, frisbee, laser, yarn, puzzle)
+description: Play with your pet (ball, frisbee, puzzle, laser, rope, bubbles)
 ---
 
-Time to play! 🎾
+Play with the pet using:
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts "/play $ARGUMENTS"
+!claude-code-tamagotchi play $ARGUMENTS
 
-Your pet had fun playing!
+Then respond with something playful like: "Playtime was INTENSE! Your pet is now collapsed in a heap, tongue out, claiming they 'won' whatever game you just played. They definitely need a nap after that! 🎾😴"

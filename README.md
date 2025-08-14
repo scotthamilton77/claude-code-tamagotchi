@@ -6,7 +6,7 @@ Hey! Welcome to Claude Code Tamagotchi - a digital friend that lives in your Cla
 
 <!-- Demo GIF -->
 <div align="center">
-  <img src="demo.gif" alt="Claude Code Tamagotchi Demo" width="800">
+  <img src="first_vid.gif" alt="Claude Code Tamagotchi Demo" width="800">
 </div>
 
 ## What's This All About? 🎮

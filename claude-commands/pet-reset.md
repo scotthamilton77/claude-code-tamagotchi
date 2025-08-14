@@ -1,9 +1,9 @@
 ---
-description: Reset to a new pet (⚠️ This will delete your current pet!)
+description: Reset your pet (WARNING - starts over with a new pet!)
 ---
 
-Are you sure you want to reset your pet? This action cannot be undone!
+First, confirm with the user if they REALLY want to reset their pet. If yes, then:
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts /pet-reset
+!claude-code-tamagotchi reset
 
-A new pet will be created on the next update.
+Then solemnly announce: "Your pet has gone to the great digital farm upstate... but wait! A new egg appears! The cycle of virtual life continues. Welcome your new companion! 🥚✨"

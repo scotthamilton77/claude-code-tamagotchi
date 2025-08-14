@@ -1,5 +1,9 @@
 ---
-description: Show all pet commands and help information
+description: Show all available pet commands
 ---
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts /pet-help
+Show the available commands:
+
+!claude-code-tamagotchi help
+
+Then add: "There you go! Your complete pet care manual. Remember: with great pet ownership comes great responsibility... and occasional digital cleanup duty. 📚🐾"

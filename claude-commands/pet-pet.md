@@ -1,9 +1,9 @@
 ---
-description: Pet your companion to show affection
+description: Pet your companion - give them love and attention
 ---
 
-Show your pet some love! 💕
+Give the pet some affection:
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts /pet
+!claude-code-tamagotchi pet
 
-Your pet feels loved and appreciated!
+Then tell the user: "Your pet is absolutely MELTING from the pets! They're making that weird rumbling sound... wait, are digital pets supposed to purr? Either way, happiness levels are through the roof! 💕✨"

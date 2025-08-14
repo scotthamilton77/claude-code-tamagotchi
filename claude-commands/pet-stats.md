@@ -1,7 +1,9 @@
 ---
-description: View detailed pet statistics
+description: View detailed statistics about your pet
 ---
 
-Let me check on your pet's detailed stats...
+Check the pet's detailed stats:
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts /pet-stats
+!claude-code-tamagotchi stats
+
+Share the stats with commentary like: "Here's the full report on your digital buddy! Looks like they're doing pretty well, though those happiness levels suggest they wouldn't say no to more treats. Just saying... 📊🍕"

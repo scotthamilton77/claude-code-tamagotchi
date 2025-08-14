@@ -1,9 +1,9 @@
 ---
-description: Give your pet a bath
+description: Give your pet a bath - keep them clean and fresh
 ---
 
-Bath time! 🛁
+Give the pet a bath:
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts /clean
+!claude-code-tamagotchi clean
 
-Your pet is now squeaky clean!
+Then announce: "Bath time was... eventful. Your pet is now sparkling clean but giving you the stink eye. They're pretending to shake off water even though they're made of pixels. Drama queen! 🛁✨"

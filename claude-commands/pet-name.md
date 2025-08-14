@@ -1,9 +1,9 @@
 ---
-description: Rename your pet
+description: Give your pet a new name
 ---
 
-Let's give your pet a new name!
+Rename the pet:
 
-!cd $PET_PATH && bun src/commands/pet-cli.ts "/pet-name $ARGUMENTS"
+!claude-code-tamagotchi name $ARGUMENTS
 
-Your pet has been renamed!
+Then celebrate: "Identity crisis resolved! Your pet is now officially known as $ARGUMENTS. They're practicing their new signature and updating their social media handles. It's a whole thing. 📝✨"
