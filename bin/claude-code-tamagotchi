@@ -1,0 +1,66 @@
+#!/usr/bin/env node
+
+// CLI entry point for claude-code-pet
+// This file serves as the binary entry point when installed globally
+
+const { spawn } = require('child_process');
+const path = require('path');
+
+const args = process.argv.slice(2);
+const command = args[0];
+
+// If no command or "statusline" command, run the statusline
+if (!command || command === 'statusline') {
+  const scriptPath = path.join(__dirname, '..', 'src', 'index.ts');
+  
+  // Check if bun is available
+  const runner = process.env.BUN_INSTALL ? 'bun' : 'node';
+  
+  const child = spawn(runner, [scriptPath], {
+    stdio: 'inherit',
+    env: process.env
+  });
+  
+  child.on('error', (err) => {
+    console.error('Failed to start claude-code-tamagotchi:', err);
+    process.exit(1);
+  });
+  
+  child.on('exit', (code) => {
+    process.exit(code || 0);
+  });
+} else if (command === 'help' || command === '--help' || command === '-h') {
+  console.log(`
+🐾 Claude Code Tamagotchi - Virtual Pet for your statusline
+
+Usage:
+  claude-code-tamagotchi              Run the statusline (default)
+  claude-code-tamagotchi statusline   Run the statusline
+  claude-code-tamagotchi help         Show this help message
+
+When installed globally:
+  npm install -g claude-code-tamagotchi
+  
+Then update your Claude Code settings.json:
+  {
+    "statusLine": {
+      "type": "command",
+      "command": "npx -y claude-code-tamagotchi statusline"
+    }
+  }
+
+Or with bun:
+  bun add -g claude-code-tamagotchi
+  
+  {
+    "statusLine": {
+      "type": "command", 
+      "command": "bunx claude-code-tamagotchi statusline"
+    }
+  }
+`);
+} else {
+  console.error(`Unknown command: ${command}`);
+  console.log('Run "claude-code-tamagotchi help" for usage information');
+  process.exit(1);
+}
