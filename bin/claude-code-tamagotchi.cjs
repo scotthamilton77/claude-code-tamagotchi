@@ -60,6 +60,9 @@ if (!command || command === 'statusline') {
   child.on('exit', (code) => {
     process.exit(code || 0);
   });
+} else if (command === '--version' || command === '-v' || command === 'version') {
+  const pkg = require('../package.json');
+  console.log(`claude-code-tamagotchi v${pkg.version}`);
 } else if (command === 'help' || command === '--help' || command === '-h') {
   console.log(`
 🐾 Claude Code Tamagotchi - Virtual Pet for your statusline
@@ -67,9 +70,11 @@ if (!command || command === 'statusline') {
 USAGE:
   claude-code-tamagotchi [command] [options]
 
-STATUSLINE:
+GENERAL:
   claude-code-tamagotchi              Run the statusline (default)
   claude-code-tamagotchi statusline   Run the statusline
+  claude-code-tamagotchi --version    Show version
+  claude-code-tamagotchi help         Show this help message
 
 PET CARE COMMANDS:
   claude-code-tamagotchi feed [food]  Feed your pet (pizza, cookie, sushi, etc.)
@@ -97,8 +102,11 @@ EXAMPLES:
   claude-code-tamagotchi name "Mr. Fluffkins"
 
 INSTALLATION:
-  # Global install with bun:
-  bun add -g github:Ido-Levi/claude-code-tamagotchi
+  # Global install with npm:
+  npm install -g claude-code-tamagotchi
+  
+  # Or with bun:
+  bun add -g claude-code-tamagotchi
   
   # Then update your Claude Code settings.json:
   {

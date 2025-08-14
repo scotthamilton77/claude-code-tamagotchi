@@ -36,8 +36,11 @@ That's your Claude Code Tamagotchi - part companion, part life coach, all friend
 
 #### Option 1: Global Install (Easiest!)
 ```bash
-# Install globally with bun
-bun add -g github:Ido-Levi/claude-code-tamagotchi
+# Install globally with npm
+npm install -g claude-code-tamagotchi
+
+# Or with bun  
+bun add -g claude-code-tamagotchi
 
 # Update your Claude Code settings.json:
 # ~/.claude/settings.json

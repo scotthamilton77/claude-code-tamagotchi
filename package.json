@@ -1,6 +1,6 @@
 {
   "name": "claude-code-tamagotchi",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A virtual pet that lives in your Claude Code statusline",
   "type": "module",
   "main": "dist/index.js",
@@ -15,7 +15,13 @@
     "dev": "bun run --watch src/index.ts",
     "prepublishOnly": "bun run build"
   },
-  "keywords": ["claude-code", "tamagotchi", "pet", "statusline", "virtual-pet"],
+  "keywords": [
+    "claude-code",
+    "tamagotchi",
+    "pet",
+    "statusline",
+    "virtual-pet"
+  ],
   "author": "Ido Levi",
   "license": "MIT",
   "repository": {

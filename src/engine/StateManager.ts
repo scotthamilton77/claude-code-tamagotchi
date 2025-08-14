@@ -156,7 +156,7 @@ export class StateManager {
     };
   }
   
-  private async waitForLock(maxAttempts = 10): Promise<boolean> {
+  private async waitForLock(maxAttempts = 3): Promise<boolean> {
     for (let i = 0; i < maxAttempts; i++) {
       if (!fs.existsSync(this.lockFile)) {
         try {
@@ -166,8 +166,12 @@ export class StateManager {
           // Another process got the lock first
         }
       }
-      // Exponential backoff
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 10));
+      
+      // Only wait if this isn't the last attempt
+      if (i < maxAttempts - 1) {
+        // Much shorter wait time - max 40ms
+        await new Promise(resolve => setTimeout(resolve, Math.min(Math.pow(2, i) * 10, 40)));
+      }
     }
     return false;
   }
