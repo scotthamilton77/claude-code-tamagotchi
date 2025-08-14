@@ -1,9 +1,5 @@
 # Claude Code Tamagotchi 🐾
 
-[![npm version](https://img.shields.io/npm/v/claude-code-tamagotchi.svg)](https://www.npmjs.com/package/claude-code-tamagotchi)
-[![npm downloads](https://img.shields.io/npm/dm/claude-code-tamagotchi.svg)](https://www.npmjs.com/package/claude-code-tamagotchi)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 > *Because nobody should code alone*
 
 Hey! Welcome to Claude Code Tamagotchi - a digital friend that lives in your Claude Code statusline and keeps you company while you build cool stuff. It's literally a Tamagotchi for developers, but instead of a keychain, it lives where you work.
@@ -182,7 +178,7 @@ Your Tamagotchi is fully customizable through environment variables! Set these i
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PET_SHOW_DIRECTORY` | `true` | Show current directory in statusline |
-| `PET_SHOW_SESSION` | `false` | Show session update counter |
+| `PET_SHOW_SESSION` | `true` | Show session update counter |
 
 #### ⏱️ Decay Rates (How Fast Stats Drop)
 | Variable | Default | Description |
