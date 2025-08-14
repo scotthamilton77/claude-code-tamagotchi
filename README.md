@@ -38,22 +38,17 @@ That's your Claude Code Tamagotchi - part companion, part life coach, all friend
 
 ### Installation Options
 
-#### Option 1: Global Install with npm (Easiest!)
+#### Option 1: Global Install (Easiest!)
 ```bash
-# Install globally with npm
-npm install -g claude-code-tamagotchi
-
-# Or with bun
-bun add -g claude-code-tamagotchi
+# Install globally with bun
+bun add -g github:Ido-Levi/claude-code-tamagotchi
 
 # Update your Claude Code settings.json:
 # ~/.claude/settings.json
 {
   "statusLine": {
     "type": "command",
-    "command": "npx -y claude-code-tamagotchi statusline"  # for npm
-    # OR
-    "command": "bunx claude-code-tamagotchi statusline"     # for bun
+    "command": "bunx claude-code-tamagotchi statusline"
   }
 }
 
@@ -187,7 +182,7 @@ Your Tamagotchi is fully customizable through environment variables! Set these i
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PET_SHOW_DIRECTORY` | `true` | Show current directory in statusline |
-| `PET_SHOW_SESSION` | `true` | Show session update counter |
+| `PET_SHOW_SESSION` | `false` | Show session update counter |
 
 #### ⏱️ Decay Rates (How Fast Stats Drop)
 | Variable | Default | Description |

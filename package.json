@@ -14,19 +14,12 @@
     "dev": "bun run --watch src/index.ts",
     "prepublishOnly": "bun run build"
   },
-  "keywords": ["claude-code", "tamagotchi", "pet", "statusline", "virtual-pet", "cli", "terminal"],
+  "keywords": ["claude-code", "tamagotchi", "pet", "statusline", "virtual-pet"],
   "author": "Ido Levi",
   "license": "MIT",
-  "homepage": "https://github.com/Ido-Levi/claude-code-tamagotchi#readme",
-  "bugs": {
-    "url": "https://github.com/Ido-Levi/claude-code-tamagotchi/issues"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Ido-Levi/claude-code-tamagotchi.git"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   },
   "files": [
     "bin/",

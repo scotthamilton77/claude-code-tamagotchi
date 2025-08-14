@@ -379,7 +379,7 @@ export class PetEngine {
     stats += `❤️ ${Math.round(this.state.happiness)}%`;
     
     // Add session info if enabled
-    const showSession = process.env.PET_SHOW_SESSION !== 'false';
+    const showSession = process.env.PET_SHOW_SESSION === 'true';
     if (showSession) {
       stats += ` | Session: ${this.state.sessionUpdateCount}`;
     }
