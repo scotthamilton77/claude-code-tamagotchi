@@ -1,6 +1,7 @@
 import { StateManager, PetState } from './StateManager';
 import { AnimationManager } from './AnimationManager';
 import { ActivitySystem } from './ActivitySystem';
+import { FeedbackSystem } from './feedback/FeedbackSystem';
 import { config } from '../utils/config';
 import * as fs from 'fs';
 
@@ -14,19 +15,23 @@ export class PetEngine {
   private stateManager: StateManager;
   private animationManager: AnimationManager;
   private activitySystem: ActivitySystem;
+  private feedbackSystem: FeedbackSystem;
   private state: PetState | null = null;
+  private transcriptPath?: string;
+  private sessionId?: string;
   
   constructor() {
     this.stateManager = new StateManager();
     this.animationManager = new AnimationManager();
     this.activitySystem = new ActivitySystem();
+    this.feedbackSystem = new FeedbackSystem();
   }
   
   async initialize(): Promise<void> {
     this.state = await this.stateManager.load();
   }
   
-  async update(): Promise<void> {
+  async update(transcriptPath?: string, sessionId?: string): Promise<void> {
     if (!this.state) {
       await this.initialize();
     }
@@ -35,11 +40,20 @@ export class PetEngine {
       throw new Error('Failed to initialize pet state');
     }
     
+    // Store for later use
+    this.transcriptPath = transcriptPath;
+    this.sessionId = sessionId;
+    
     // Check for pending actions from commands
     await this.checkForActions();
     
     // Apply activity-based updates instead of time decay
     this.activitySystem.applyActivityUpdate(this.state);
+    
+    // Process feedback if enabled
+    if (config.feedbackEnabled && transcriptPath && sessionId) {
+      this.feedbackSystem.processFeedback(this.state, transcriptPath, sessionId);
+    }
     
     // Check if pending action is complete
     if (this.state.pendingAction) {
@@ -274,6 +288,9 @@ export class PetEngine {
     
     const petFrame = this.animationManager.getFrame(this.state);
     
+    // Save state after animation frame increment
+    this.stateManager.save(this.state);
+    
     // Build display with activity context
     let display = `${petFrame} ${this.state.name}`;
     
@@ -406,7 +423,19 @@ export class PetEngine {
   }
   
   getCurrentThought(): string | null {
-    if (!this.state || !this.state.currentThought) return null;
+    if (!this.state) return null;
+    
+    // Check for feedback thought (conversation-relevant)
+    const feedbackThought = this.feedbackSystem.getFeedbackThought(this.state);
+    
+    // Use ratio to decide which type of thought to show
+    if (feedbackThought && Math.random() < config.conversationThoughtRatio) {
+      // Show conversation-relevant thought (funny observation about the code)
+      return feedbackThought;
+    }
+    
+    // Fall back to regular thought (mood/stats based)
+    if (!this.state.currentThought) return null;
     
     // Thoughts last longer than system messages
     const thoughtAge = Date.now() - (this.state.thoughtTimestamp || 0);
@@ -415,5 +444,10 @@ export class PetEngine {
     }
     
     return this.state.currentThought;
+  }
+  
+  getFeedbackIcon(): string | null {
+    if (!this.state) return null;
+    return this.feedbackSystem.getFeedbackIcon(this.state);
   }
 }

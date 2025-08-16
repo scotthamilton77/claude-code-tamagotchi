@@ -4,12 +4,69 @@ import { config } from '../utils/config';
 
 export class AnimationManager {
   
+  // Map moods to animation names
+  private moodToAnimation: Record<string, string> = {
+    'normal': 'idle',
+    'happy': 'happy',
+    'proud': 'celebrating',
+    'excited': 'happy',
+    'concerned': 'blink',
+    'confused': 'blink',
+    'suspicious': 'blink',
+    'annoyed': 'sad',
+    'frustrated': 'sad',
+    'angry': 'sad',
+    'debugging': 'blink',
+    'celebrating': 'celebrating',
+    'tired': 'tired',
+    'focused': 'idle',
+    'sleeping': 'sleeping',
+    'sad': 'sad',
+    'sick': 'sick'
+  };
+  
+  // Get the appropriate animation for current state
+  private getCurrentAnimation(state: PetState): string {
+    // Special states override mood
+    if (state.isAsleep) return 'sleeping';
+    if (state.isSick) return 'sick';
+    if (state.hunger < 20) return 'sad';
+    
+    // Check for pending actions
+    if (state.pendingAction) {
+      switch (state.pendingAction.type) {
+        case 'eating': return 'eating';
+        case 'playing': return 'playing';
+        case 'bathing': return 'bathing';
+        case 'sleeping': return 'sleeping';
+      }
+    }
+    
+    // Map mood to animation
+    return this.moodToAnimation[state.currentMood] || 'idle';
+  }
+  
   // Get mood-based face with breathing variation
   private getMoodFace(state: PetState): string {
-    // Map moods to pet faces
+    // Extended mood faces with feedback states
     const moodFaces: Record<string, [string, string]> = {
+      // Happy states
       'normal': ['(◕ᴥ◕)', '(◕ᴗ◕)'],
       'happy': ['(◕‿◕)', '(◕ω◕)'],
+      'proud': ['(◕ᴗ◕)✨', '(★ᴥ★)'],
+      'excited': ['(✧ᴥ✧)', '(◕ᴗ◕)！'],
+      
+      // Concerned states
+      'concerned': ['(◕_◕)', '(◕.◕)'],
+      'confused': ['(◕_◕)?', '(◕｡◕)?'],
+      'suspicious': ['(¬‿¬)', '(◕_◕)...'],
+      
+      // Annoyed states
+      'annoyed': ['(◕︵◕)', '(¬_¬)'],
+      'frustrated': ['(╯◕︵◕)╯', '(ಠ_ಠ)'],
+      'angry': ['(╬◕︵◕)', '💢(◕︵◕)'],
+      
+      // Activity states
       'debugging': ['(◕_◕)', '(◕.◕)'],
       'celebrating': ['(✧ᴥ✧)', '(★ᴥ★)'],
       'tired': ['(◔_◔)', '(◔‸◔)'],
@@ -55,8 +112,28 @@ export class AnimationManager {
   }
   
   getFrame(state: PetState): string {
-    // Get the mood-based face with breathing animation
-    let petDisplay = this.getMoodFace(state);
+    // Get the appropriate animation for current state
+    const desiredAnimation = this.getCurrentAnimation(state);
+    
+    // Check if we need to switch animations
+    if (state.currentAnimationName !== desiredAnimation) {
+      state.currentAnimationName = desiredAnimation;
+      state.animationFrame = 0; // Reset frame counter when switching animations
+    }
+    
+    // Get the animation object
+    const animation = animations[state.currentAnimationName];
+    if (!animation) {
+      // Fallback if animation doesn't exist
+      return this.getMoodFace(state);
+    }
+    
+    // Get current frame
+    const frame = animation.frames[state.animationFrame];
+    let petDisplay = frame ? frame.pet : '(◕ᴥ◕)';
+    
+    // Increment frame counter for next update
+    state.animationFrame = (state.animationFrame + 1) % animation.frames.length;
     
     // Add activity indicators
     if (state.sessionUpdateCount > 100) {
@@ -66,13 +143,6 @@ export class AnimationManager {
       // Milestone indicator
       petDisplay = `${petDisplay} ✨`;
     }
-    
-    // Add head tilt for questions (microAnimationFrame)
-    if (state.microAnimationFrame === 1) {
-      petDisplay = petDisplay.replace('◕', '◔'); // Tilt effect
-    }
-    
-    // No accessories - removed feature
     
     // Add weather overlay if enabled
     if (config.enableWeatherEffects) {
@@ -86,7 +156,7 @@ export class AnimationManager {
     if (config.enableLogging && config.debugMode) {
       const fs = require('fs');
       fs.appendFileSync('/tmp/pet-animation.log', 
-        `Mood: ${state.currentMood}, Breathing: ${state.breathingState}, Display: ${petDisplay}\n`);
+        `Animation: ${state.currentAnimationName}, Frame: ${state.animationFrame}, Display: ${petDisplay}\n`);
     }
     
     return petDisplay;

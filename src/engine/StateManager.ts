@@ -43,10 +43,30 @@ export interface PetState {
   // Animation state (NEW)
   breathingState: boolean;        // Simple toggle for breathing
   microAnimationFrame: number;    // For small animations
+  animationFrame: number;         // Current frame in animation sequence (0-n)
+  currentAnimationName: string;   // Name of current animation being played
   
   // Mood and patterns (NEW)
-  currentMood: 'normal' | 'debugging' | 'celebrating' | 'tired' | 'focused' | 'sleeping';
+  currentMood: 'normal' | 'debugging' | 'celebrating' | 'tired' | 'focused' | 'sleeping' | 
+               'proud' | 'excited' | 'concerned' | 'confused' | 'suspicious' |
+               'annoyed' | 'frustrated' | 'angry' | 'furious';
   recentKeywords: string[];       // Recent keywords from conversation
+  
+  // Feedback system fields (NEW)
+  claudeBehaviorScore: number;    // 0-100, how well Claude is behaving
+  recentViolations: number;       // Count of recent issues
+  feedbackHistory: Array<{
+    type: string;
+    severity: string;
+    remark: string;
+    timestamp: number;
+  }>;
+  lastTranscriptCheck?: string;   // Last message UUID checked
+  currentFeedback?: {              // Current feedback being displayed
+    icon: string;
+    remark: string;
+    timestamp: number;
+  };
   
   // Legacy activity tracking
   foodEaten: string[];
@@ -131,10 +151,19 @@ export class StateManager {
       // Animation state
       breathingState: false,
       microAnimationFrame: 0,
+      animationFrame: 0,
+      currentAnimationName: 'idle',
       
       // Mood
       currentMood: 'normal',
       recentKeywords: [],
+      
+      // Feedback system
+      claudeBehaviorScore: 80,
+      recentViolations: 0,
+      feedbackHistory: [],
+      lastTranscriptCheck: undefined,
+      currentFeedback: undefined,
       
       // Legacy
       foodEaten: [],
@@ -241,12 +270,27 @@ export class StateManager {
             this.state.recentKeywords = [];
           }
           
+          // Migrate animation frame tracking
+          if (this.state.animationFrame === undefined) {
+            this.state.animationFrame = 0;
+            this.state.currentAnimationName = 'idle';
+          }
+          
           // Migrate thought system fields
           if (this.state.lastThoughtUpdate === undefined) {
             this.state.lastThoughtUpdate = 0;
             this.state.thoughtHistory = [];
             this.state.thoughtCategoryFatigue = {};
             this.state.thoughtEscalation = {};
+          }
+          
+          // Migrate feedback system fields
+          if (this.state.claudeBehaviorScore === undefined) {
+            this.state.claudeBehaviorScore = 80;
+            this.state.recentViolations = 0;
+            this.state.feedbackHistory = [];
+            this.state.lastTranscriptCheck = undefined;
+            this.state.currentFeedback = undefined;
           }
         }
       } else {

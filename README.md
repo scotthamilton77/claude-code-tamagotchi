@@ -6,7 +6,7 @@ Hey! Welcome to Claude Code Tamagotchi - a digital friend that lives in your Cla
 
 <!-- Demo GIF -->
 <div align="center">
-  <img src="demo.gif" alt="Claude Code Tamagotchi Demo" width="800">
+  <img src="thoughts_demo.gif" alt="Claude Code Tamagotchi Demo">
 </div>
 
 ## What's This All About? 🎮
@@ -24,6 +24,110 @@ Picture this: It's 2am. You're deep in a debugging session. Suddenly, your pet p
 > 💭 "Hey... we've been at this for 4 hours. Maybe the bug will still be there after a snack?"
 
 That's your Claude Code Tamagotchi - part companion, part life coach, all friend.
+
+## 🧠 AI-Powered Real-Time Observations
+
+Your pet generates thoughts based on what's actually happening in your coding session! It watches Claude Code work and reacts with contextual commentary. 
+
+**The pet's mood changes based on Claude's behavior:**
+- 😊 **Happy**: When Claude follows instructions perfectly
+- 😕 **Concerned**: When Claude seems to be wandering off-task
+- 😠 **Annoyed**: When Claude does something different than asked
+- 😡 **Angry**: When Claude repeatedly ignores your requests
+
+### Live Examples
+```
+💭 "GroqClient.ts? That's... actually where the answers live!"
+💭 "Back to README.md? There must be gold in there!"  
+💭 "Straight to the bug! Someone came prepared today!"
+💭 "AnimationManager.ts again? This pet's getting dizzy!"
+```
+
+### How It Works
+
+```mermaid
+flowchart TB
+    subgraph "Real-time Processing"
+        A[Claude sends message/uses tool] --> B{Quick Analysis}
+        B --> C[Extract action<br/>Read, Edit, Bash, etc.]
+        B --> D[Save summary<br/>to SQLite]
+    end
+    
+    subgraph "Background Analysis"
+        D --> E[🚀 Spawn worker process]
+        E --> F[Build context]
+        F --> G[📝 User's request]
+        F --> H[🔧 Claude's actions]
+        F --> I[🐾 Pet's current state]
+        
+        G & H & I --> J[🤖 Groq LLM<br/>50ms response]
+    end
+    
+    subgraph "Decision Making"
+        J --> K{Analyze behavior}
+        K -->|"Followed instructions"| L[😊 Happy mood<br/>Encouraging thought]
+        K -->|"Did something else"| M[😠 Annoyed mood<br/>Sassy observation]
+        K -->|"Repeatedly ignored"| N[😡 Angry mood<br/>Critical feedback]
+    end
+    
+    subgraph "Display"
+        L & M & N --> O[💾 Cache in DB]
+        O --> P[Update pet state]
+        P --> Q[🎯 Show in statusline<br/>with witty observation]
+    end
+    
+    style J fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style K fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style Q fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+```
+
+**The Architecture:**
+1. **Message Storage**: Every Claude message gets summarized and stored in SQLite
+2. **Background Processing**: Spawns lightweight worker process for analysis
+3. **Context Building**: Loads user request + Claude's actions + conversation history
+4. **LLM Analysis**: Groq's ultra-fast API generates contextual observation
+5. **Smart Caching**: Stores feedback to prevent duplicate thoughts
+6. **Mood System**: Updates pet's mood based on Claude's behavior score
+
+**Why Groq?**
+- ⚡ **50ms responses** - Real-time reactions without lag
+- 💰 **Extremely cheap** - Practically free for personal use
+- 🚀 **Custom chips** - Purpose-built for instant LLM inference
+- 🎯 **GPT OSS 20B** - Understands code context perfectly
+
+### Quick Setup (30 seconds!)
+```bash
+# 1. Get free API key from https://console.groq.com/keys
+# 2. Run setup script
+./enable-feedback.sh
+# 3. That's it! Your pet now has AI powers! 🎉
+```
+
+### Manual Configuration
+
+To enable AI observations, set these environment variables in your shell profile:
+
+**Required Variables:**
+```bash
+export PET_FEEDBACK_ENABLED=true              # Must be true to enable
+export PET_GROQ_API_KEY="your-api-key-here"  # Get from https://console.groq.com/keys
+```
+
+**Optional Tuning:**
+```bash
+export PET_GROQ_MODEL="openai/gpt-oss-20b"   # Best quality (default)
+# export PET_GROQ_MODEL="llama-3.1-8b-instant" # Faster but less accurate
+
+export PET_FEEDBACK_CHECK_INTERVAL=5          # Check every N updates (default: 5)
+export PET_FEEDBACK_DEBUG=false               # Set true for debug logs
+export PET_FEEDBACK_LOG_DIR="$HOME/.claude/pets/logs"  # Where to save logs
+```
+
+**Mood Thresholds** (when pet gets angry):
+```bash
+export PET_ANNOYED_THRESHOLD=3   # Violations before annoyed (default: 3)
+export PET_ANGRY_THRESHOLD=5     # Violations before angry (default: 5)
+```
 
 ## Quick Start 🚀
 
@@ -340,6 +444,25 @@ A: Yes! Check out `src/engine/thoughts/` - PRs with new thoughts are always welc
 **Pet seems frozen?**
 - They only update during active conversations
 - Try typing something to wake them up!
+
+**Node.js v23 TypeScript Error?**
+If you installed with npm and get this error when running `claude-code-tamagotchi statusline`:
+```
+Error [ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING]: Stripping types is currently unsupported for files under node_modules
+```
+
+This happens because Node.js v23's native TypeScript support doesn't work with files inside `node_modules`. 
+
+**Solution:** Use Bun instead of npm for global installation:
+```bash
+# Uninstall from npm
+npm uninstall -g claude-code-tamagotchi
+
+# Install with Bun (handles TypeScript everywhere)
+bun add -g claude-code-tamagotchi
+```
+
+Alternatively, install from source or use nvm which may handle the package structure differently.
 
 ## Uninstalling 😢
 

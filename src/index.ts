@@ -55,7 +55,11 @@ async function main() {
     // Initialize pet engine
     const engine = new PetEngine();
     await engine.initialize();
-    await engine.update();
+    
+    // Pass transcript info if available
+    const transcriptPath = input?.transcript_path;
+    const sessionId = input?.session_id;
+    await engine.update(transcriptPath, sessionId);
     
     // Get pet display
     const petDisplay = engine.getDisplay();
@@ -64,8 +68,9 @@ async function main() {
     // Get system message if any
     const message = engine.getSystemMessage();
     
-    // Get current thought
+    // Get current thought and feedback icon
     const thought = engine.getCurrentThought();
+    const feedbackIcon = engine.getFeedbackIcon();
     
     // Build statusline output
     // Format: [Pet Display] | [Stats] | [Directory] | [Model] | [Message or Thought]
@@ -89,7 +94,9 @@ async function main() {
     if (message) {
       output += ` | 💬 ${message}`;
     } else if (thought) {
-      output += ` | 💭 ${thought}`;
+      // Use feedback icon if available, otherwise default thought bubble
+      const icon = feedbackIcon || '💭';
+      output += ` | ${icon} ${thought}`;
     }
     
     // Output to stdout (first line becomes statusline)
@@ -113,7 +120,7 @@ async function main() {
     
   } catch (error) {
     // Fallback output on error
-    console.log('(◕ᴥ◕) Pet Error | 📁 ' + path.basename(process.cwd()));
+    console.log(`(◕ᴥ◕) Pet Error: ${error instanceof Error ? error.message : 'Unknown'} | 📁 ${path.basename(process.cwd())}`);
     
     if (config.debugMode) {
       console.error(error);

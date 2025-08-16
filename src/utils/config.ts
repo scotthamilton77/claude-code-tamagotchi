@@ -45,6 +45,32 @@ export interface Config {
   enableSounds: boolean;
   enableWeatherEffects: boolean;
   
+  // Thought system
+  conversationThoughtRatio: number;
+  
+  // Feedback system
+  feedbackEnabled: boolean;
+  feedbackMode: 'full' | 'passive' | 'off';
+  feedbackCheckInterval: number;
+  feedbackBatchSize: number;
+  feedbackMinMessages: number;
+  feedbackStaleLockTime: number;
+  feedbackDbPath: string;
+  feedbackDbMaxSize: number;
+  groqApiKey?: string;
+  groqModel: string;
+  groqTimeout: number;
+  groqMaxRetries: number;
+  moodDecayRate: number;
+  annoyedThreshold: number;
+  angryThreshold: number;
+  furiousThreshold: number;
+  praiseBoost: number;
+  feedbackIconStyle: 'emoji' | 'ascii' | 'minimal';
+  feedbackRemarkLength: number;
+  showComplianceScore: boolean;
+  feedbackMaxHistory: number;
+  
   // Paths
   stateFile: string;
   actionFile: string;
@@ -83,6 +109,32 @@ export const config: Config = {
   enableAccessories: process.env.ENABLE_ACCESSORIES !== 'false',
   enableSounds: process.env.ENABLE_SOUNDS === 'true',
   enableWeatherEffects: process.env.ENABLE_WEATHER_EFFECTS !== 'false',
+  
+  // Thought system
+  conversationThoughtRatio: parseFloat(process.env.PET_CONVERSATION_THOUGHT_RATIO || '1.0'),
+  
+  // Feedback system
+  feedbackEnabled: process.env.PET_FEEDBACK_ENABLED === 'true',
+  feedbackMode: (process.env.PET_FEEDBACK_MODE as any) || 'full',
+  feedbackCheckInterval: parseInt(process.env.PET_FEEDBACK_CHECK_INTERVAL || '5'),
+  feedbackBatchSize: parseInt(process.env.PET_FEEDBACK_BATCH_SIZE || '10'),
+  feedbackMinMessages: parseInt(process.env.PET_FEEDBACK_MIN_MESSAGES || '3'),
+  feedbackStaleLockTime: parseInt(process.env.PET_FEEDBACK_STALE_LOCK_TIME || '30000'),
+  feedbackDbPath: resolvePath(process.env.PET_FEEDBACK_DB_PATH || '~/.claude/pets/feedback.db'),
+  feedbackDbMaxSize: parseInt(process.env.PET_FEEDBACK_DB_MAX_SIZE || '50'),
+  groqApiKey: process.env.PET_GROQ_API_KEY,
+  groqModel: process.env.PET_GROQ_MODEL || 'openai/gpt-oss-20b',
+  groqTimeout: parseInt(process.env.PET_GROQ_TIMEOUT || '2000'),
+  groqMaxRetries: parseInt(process.env.PET_GROQ_MAX_RETRIES || '2'),
+  moodDecayRate: parseInt(process.env.PET_MOOD_DECAY_RATE || '5'),
+  annoyedThreshold: parseInt(process.env.PET_ANNOYED_THRESHOLD || '3'),
+  angryThreshold: parseInt(process.env.PET_ANGRY_THRESHOLD || '5'),
+  furiousThreshold: parseInt(process.env.PET_FURIOUS_THRESHOLD || '8'),
+  praiseBoost: parseInt(process.env.PET_PRAISE_BOOST || '10'),
+  feedbackIconStyle: (process.env.PET_FEEDBACK_ICON_STYLE as any) || 'emoji',
+  feedbackRemarkLength: parseInt(process.env.PET_FEEDBACK_REMARK_LENGTH || '50'),
+  showComplianceScore: process.env.PET_SHOW_COMPLIANCE_SCORE === 'true',
+  feedbackMaxHistory: parseInt(process.env.PET_FEEDBACK_MAX_HISTORY || '200'),
   
   // Paths
   stateFile: resolvePath(process.env.PET_STATE_FILE || '~/.claude/pets/claude-pet-state.json'),

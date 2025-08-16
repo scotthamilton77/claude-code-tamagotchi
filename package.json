@@ -1,6 +1,6 @@
 {
   "name": "claude-code-tamagotchi",
-  "version": "1.0.6",
+  "version": "1.2.0",
   "description": "A virtual pet that lives in your Claude Code statusline",
   "type": "module",
   "main": "dist/index.js",
@@ -36,7 +36,8 @@
     "LICENSE"
   ],
   "dependencies": {
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "groq-sdk": "^0.30.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
