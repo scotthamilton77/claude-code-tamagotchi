@@ -70,6 +70,10 @@ export class TranscriptAnalyzer {
         try {
           const fs = require('fs');
           const path = require('path');
+          // Create log directory if it doesn't exist
+          if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+          }
           const logFile = path.join(logDir, 'feedback-analyzer.log');
           fs.appendFileSync(logFile, logMessage);
         } catch {

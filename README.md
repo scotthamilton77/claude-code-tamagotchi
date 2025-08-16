@@ -110,7 +110,8 @@ To enable AI observations, set these environment variables in your shell profile
 **Required Variables:**
 ```bash
 export PET_FEEDBACK_ENABLED=true              # Must be true to enable
-export PET_GROQ_API_KEY="your-api-key-here"  # Get from https://console.groq.com/keys
+export GROQ_API_KEY="your-api-key-here"       # Get from https://console.groq.com/keys
+# OR use PET_GROQ_API_KEY if you prefer the prefixed version
 ```
 
 **Optional Tuning:**

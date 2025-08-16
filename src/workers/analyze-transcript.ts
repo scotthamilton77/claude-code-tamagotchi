@@ -30,6 +30,10 @@ function debug(message: string): void {
     const logDir = process.env.PET_FEEDBACK_LOG_DIR;
     if (logDir) {
       try {
+        // Create log directory if it doesn't exist
+        if (!fs.existsSync(logDir)) {
+          fs.mkdirSync(logDir, { recursive: true });
+        }
         const logFile = path.join(logDir, 'feedback-worker.log');
         fs.appendFileSync(logFile, logMessage);
       } catch {

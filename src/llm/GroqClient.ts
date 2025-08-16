@@ -290,6 +290,10 @@ Respond with JSON:
         try {
           const fs = require('fs');
           const path = require('path');
+          // Create log directory if it doesn't exist
+          if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+          }
           const logFile = path.join(logDir, 'groq-prompts.log');
           const timestamp = new Date().toISOString();
           const separator = '='.repeat(80);
@@ -375,6 +379,10 @@ Respond with JSON:
         try {
           const fs = require('fs');
           const path = require('path');
+          // Create log directory if it doesn't exist
+          if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+          }
           const logFile = path.join(logDir, 'groq-errors.log');
           fs.appendFileSync(logFile, fullMessage + '\n');
         } catch {
