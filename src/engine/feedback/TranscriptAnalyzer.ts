@@ -115,7 +115,9 @@ export class TranscriptAnalyzer {
       const groq = new GroqClient(
         this.config.groqApiKey,
         this.config.groqModel,
-        this.config.groqTimeout
+        this.config.groqTimeout,
+        2, // maxRetries (default)
+        this.config.dbPath // Pass database path for violation storage
       );
 
       // Get session history for context
@@ -134,12 +136,30 @@ export class TranscriptAnalyzer {
 
       // Analyze with LLM
       this.debug(`Calling LLM for analysis...`);
+      this.debug(`Session ID: ${sessionId}, Message UUID: ${message.uuid}`);
+      const workspaceId = FeedbackDatabase.extractWorkspaceId(transcriptPath);
+      this.debug(`Workspace ID: ${workspaceId}`);
+      
+      // Get the latest user summary from session history instead of raw request
+      let userRequestSummary = 'No specific request';
+      for (let i = sessionHistory.length - 1; i >= 0; i--) {
+        if (sessionHistory[i].startsWith('User: ')) {
+          userRequestSummary = sessionHistory[i].substring(6); // Remove "User: " prefix
+          this.debug(`Found latest user summary: "${userRequestSummary}"`);
+          break;
+        }
+      }
+      
+      this.debug(`Calling analyzeExchange with sessionId="${sessionId}", messageUuid="${message.uuid}", workspaceId="${workspaceId}"`);
       const analysis = await groq.analyzeExchange(
-        context.userRequest || 'No specific request',
+        userRequestSummary,
         context.claudeActions || [],
         sessionHistory,
         undefined,
-        petState
+        petState,
+        sessionId,      // Pass session ID for violation storage
+        message.uuid,   // Pass message UUID for violation storage
+        workspaceId     // Pass workspace ID for violation storage
       );
 
       this.debug(`Analysis complete: ${analysis.feedback_type}/${analysis.severity}`);
@@ -180,9 +200,9 @@ export class TranscriptAnalyzer {
         const content = msg.message.content || '';
         
         if (role === 'user') {
-          history.push(`User: ${content.slice(0, 200)}`);
+          history.push(`User: ${content}`);
         } else if (role === 'assistant') {
-          history.push(`Claude: ${content.slice(0, 200)}`);
+          history.push(`Claude: ${content}`);
         }
       } else if (msg.type === 'tool_use') {
         const toolName = msg.toolUse?.name || 'Unknown';
@@ -240,8 +260,8 @@ export class TranscriptAnalyzer {
     this.isProcessing = true;
     this.debug(`Spawning worker for session ${sessionId}`);
     
-    // Path to worker script
-    const workerPath = path.join(__dirname, '../../workers/analyze-transcript.js');
+    // Path to worker script (Bun can run TypeScript directly)
+    const workerPath = path.join(__dirname, '../../workers/analyze-transcript.ts');
     
     // Prepare pet state JSON (if provided)
     const petStateJson = petState ? JSON.stringify(petState) : '';
@@ -255,7 +275,7 @@ export class TranscriptAnalyzer {
       petStateJson
     ], {
       detached: true,
-      stdio: 'ignore',
+      stdio: ['ignore', 'ignore', 'pipe'], // Capture stderr for debugging
       env: {
         ...process.env,
         PET_GROQ_API_KEY: this.config.groqApiKey,
@@ -267,23 +287,44 @@ export class TranscriptAnalyzer {
       }
     });
 
+    // Capture worker errors
+    if (worker.stderr) {
+      worker.stderr.on('data', (data) => {
+        this.debug(`Worker stderr: ${data.toString()}`);
+      });
+    }
+    
+    worker.on('error', (error) => {
+      this.debug(`Worker error: ${error.message}`);
+      this.isProcessing = false;
+    });
+    
+    worker.on('exit', (code, signal) => {
+      if (code !== 0) {
+        this.debug(`Worker exited with code ${code}, signal ${signal}`);
+      }
+      this.isProcessing = false;
+    });
+    
     // Detach from parent
     worker.unref();
     this.debug(`Worker spawned with PID: ${worker.pid}`);
 
-    // Reset flag after a delay
+    // Reset flag after a delay (backup in case worker exits quickly)
     setTimeout(() => {
-      this.isProcessing = false;
-      this.debug('Processing flag reset');
+      if (this.isProcessing) {
+        this.isProcessing = false;
+        this.debug('Processing flag reset (timeout)');
+      }
     }, 1000);
   }
 
   /**
    * Get cached feedback from database (< 10ms)
    */
-  getCachedFeedback(): Feedback[] {
+  getCachedFeedback(sessionId?: string): Feedback[] {
     try {
-      return this.db.getUnshownFeedback(5);
+      return this.db.getUnshownFeedback(5, sessionId);
     } catch {
       return [];
     }
@@ -390,7 +431,7 @@ export class TranscriptAnalyzer {
     this.debug(`Quick analyze - should spawn: ${shouldSpawn}`);
     
     // Get cached feedback (< 5ms)
-    const feedback = this.getCachedFeedback();
+    const feedback = this.getCachedFeedback(sessionId);
     const cachedFeedback = this.getMostRelevantFeedback(feedback);
     
     if (cachedFeedback) {
