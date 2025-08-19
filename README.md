@@ -11,9 +11,7 @@
 - What you actually asked for  
 - The violation message
 
-Every report helps us make the violation detection smarter and more accurate.
-
----
+Every report helps us make the violation detection smarter and more accurate
 
 ## Table of Contents
 
