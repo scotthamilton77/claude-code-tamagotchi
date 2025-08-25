@@ -1,10 +1,10 @@
 # Claude Code Tamagotchi 🐾
 
-> *Because nobody should code alone*
+> *Real-time behavioral enforcement for Claude Code, disguised as a virtual pet*
 
-**🚨 EXPERIMENTAL FEATURE: VIOLATION DETECTION SYSTEM 🚨**
+**🚨 EXPERIMENTAL FEATURE: BEHAVIORAL ENFORCEMENT SYSTEM 🚨**
 
-**This pet now includes an experimental "course correction" feature that monitors Claude's behavior in real-time and can block operations that violate your instructions. Think of it as a safety net that ensures Claude stays on track with what you actually asked for. This feature is in active development and may occasionally flag legitimate operations - we're tuning it based on real-world usage.**
+**This pet now includes an experimental behavioral enforcement system that monitors Claude's actions in real-time and can block operations that violate your instructions. Think of it as a safety net that ensures Claude stays on track with what you actually asked for. This feature is in active development and may occasionally flag legitimate operations - we're tuning it based on real-world usage.**
 
 **📢 Help Us Make This Amazing:** If you encounter false positives (legitimate actions blocked), please [open an issue](https://github.com/Ido-Levi/claude-code-tamagotchi/issues)! Your feedback is crucial for refining this feature. Include:
 - What Claude was trying to do
@@ -31,12 +31,14 @@ Every report helps us make the violation detection smarter and more accurate
 
 Hey! Welcome to Claude Code Tamagotchi - a digital friend that lives in your Claude Code statusline and keeps you company while you build cool stuff. It's literally a Tamagotchi for developers, but instead of a keychain, it lives where you work.
 
+But here's the twist: this isn't just a virtual pet. It's a real-time behavioral enforcement system that monitors Claude Code's actions, detects when it's going off-track, and can actually interrupt operations that violate your instructions. The pet is the friendly face of a sophisticated AI accountability system.
+
 <!-- Demo GIF -->
 <div align="center">
   <img src="assets/thoughts_demo.gif" alt="Claude Code Tamagotchi Demo">
 </div>
 
-Your pet lives right in your statusline, breathing, thinking, and reacting to your code. It gets hungry when you've been coding for hours, tired during long sessions, and genuinely excited when you fix that bug. It's like having a tiny cheerleader who also reminds you to eat lunch.
+Your pet lives right in your statusline, breathing, thinking, and reacting to your code. It gets hungry when you've been coding for hours, tired during long sessions, and genuinely excited when you fix that bug. It's like having a tiny cheerleader who also reminds you to eat lunch - and now it also makes sure Claude stays on track with what you actually asked for.
 
 ```
 (◕ᴥ◕) Leo 😊 | 🍖 73% ⚡ 66% 🧼 89% ❤️ 96% | 💭 That's a lot of TODO comments...
