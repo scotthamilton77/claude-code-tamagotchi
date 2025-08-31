@@ -33,6 +33,21 @@ export interface Config {
   weather: 'sunny' | 'rainy' | 'snowy' | 'cloudy';
   season: 'spring' | 'summer' | 'fall' | 'winter';
   
+  // Statusline Components (all configurable)
+  showPet: boolean;
+  showStats: boolean;
+  showTokens: boolean;
+  showGitBranch: boolean;
+  showCost: boolean;
+  showDuration: boolean;
+  showDirectory: boolean;
+  showModel: boolean;
+  showThoughts: boolean;
+  
+  // Token tracking
+  tokenThreshold: number;
+  tokenEstimateRatio: number;
+  
   // Decay rates (per minute)
   hungerDecayRate: number;
   happinessDecayRate: number;
@@ -97,6 +112,21 @@ export const config: Config = {
   // Environment
   weather: (process.env.WEATHER as any) || 'sunny',
   season: (process.env.SEASON as any) || 'spring',
+  
+  // Statusline Components (all configurable)
+  showPet: process.env.PET_SHOW_PET !== 'false',
+  showStats: process.env.PET_SHOW_STATS !== 'false',
+  showTokens: process.env.PET_SHOW_TOKENS !== 'false',
+  showGitBranch: process.env.PET_SHOW_GIT_BRANCH !== 'false',
+  showCost: process.env.PET_SHOW_COST !== 'false',
+  showDuration: process.env.PET_SHOW_DURATION !== 'false',
+  showDirectory: process.env.PET_SHOW_DIRECTORY !== 'false',
+  showModel: process.env.PET_SHOW_MODEL !== 'false',
+  showThoughts: process.env.PET_SHOW_THOUGHTS !== 'false',
+  
+  // Token tracking
+  tokenThreshold: parseInt(process.env.PET_TOKEN_THRESHOLD || '400000'),
+  tokenEstimateRatio: parseFloat(process.env.PET_TOKEN_ESTIMATE_RATIO || '4.0'),
   
   // Decay rates
   hungerDecayRate: parseFloat(process.env.HUNGER_DECAY_RATE || '0.5'),
