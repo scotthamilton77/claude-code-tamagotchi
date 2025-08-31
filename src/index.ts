@@ -1,23 +1,9 @@
 #!/usr/bin/env bun
 import { PetEngine } from './engine/PetEngine';
 import { config } from './utils/config';
+import { StatuslineBuilder, StatuslineInput } from './utils/StatuslineBuilder';
 import * as path from 'path';
 import * as fs from 'fs';
-
-interface StatusLineInput {
-  hook_event_name: string;
-  session_id: string;
-  transcript_path: string;
-  cwd: string;
-  model: {
-    id: string;
-    display_name: string;
-  };
-  workspace: {
-    current_dir: string;
-    project_dir: string;
-  };
-}
 
 async function main() {
   try {
@@ -61,54 +47,36 @@ async function main() {
     const sessionId = input?.session_id;
     await engine.update(transcriptPath, sessionId);
     
-    // Get pet display
-    const petDisplay = engine.getDisplay();
-    const stats = engine.getStats();
+    // Prepare pet data for statusline builder
+    const petData = {
+      display: engine.getDisplay(),
+      stats: engine.getStats(),
+      message: engine.getSystemMessage(),
+      thought: engine.getCurrentThought(),
+      feedbackIcon: engine.getFeedbackIcon()
+    };
     
-    // Get system message if any
-    const message = engine.getSystemMessage();
-    
-    // Get current thought and feedback icon
-    const thought = engine.getCurrentThought();
-    const feedbackIcon = engine.getFeedbackIcon();
-    
-    // Build statusline output
-    // Format: [Pet Display] | [Stats] | [Directory] | [Model] | [Message or Thought]
-    let output = `${petDisplay} | ${stats}`;
-    
-    // Add directory if enabled
-    const showDirectory = process.env.PET_SHOW_DIRECTORY !== 'false';
-    if (showDirectory) {
-      const dirName = path.basename(cwd);
-      const shortDir = dirName.length > 20 ? dirName.substring(0, 17) + '...' : dirName;
-      output += ` | 📁 ${shortDir}`;
-    }
-    
-    // Add model name if enabled (default: true)
-    const showModel = process.env.PET_SHOW_MODEL !== 'false';
-    if (showModel && input?.model?.display_name) {
-      output += ` | 🤖 ${input.model.display_name}`;
-    }
-    
-    // Prioritize system messages over thoughts
-    if (message) {
-      output += ` | 💬 ${message}`;
-    } else if (thought) {
-      // Use feedback icon if available, otherwise default thought bubble
-      const icon = feedbackIcon || '💭';
-      output += ` | ${icon} ${thought}`;
-    }
+    // Create statusline builder and build output
+    const statuslineBuilder = new StatuslineBuilder();
+    const output = statuslineBuilder.build(input || {
+      hook_event_name: '',
+      session_id: '',
+      transcript_path: '',
+      cwd: process.cwd(),
+      model: { id: '', display_name: '' },
+      workspace: { current_dir: process.cwd(), project_dir: process.cwd() }
+    }, petData);
     
     // Output to stdout (first line becomes statusline)
     console.log(output);
     
     // Debug logging if enabled
     if (config.enableLogging && config.debugMode && config.logFile) {
-      const fs = await import('fs');
       const logEntry = {
         timestamp: new Date().toISOString(),
         input,
         output,
+        petData,
         stats: engine.getDetailedStats()
       };
       
