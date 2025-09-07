@@ -1,3 +1,23 @@
+/**
+ * config.ts - Enhanced configuration system for Claude Code Tamagotchi
+ * 
+ * This module provides comprehensive configuration management for all aspects of the
+ * pet system. It supports environment variable overrides, path resolution, and
+ * validation of configuration values.
+ * 
+ * New Features Added:
+ * - Configurable statusline components (individual show/hide controls)
+ * - Enhanced feedback system configuration
+ * - Weather and seasonal effects
+ * - Animation and thought system tuning
+ * - Debug and logging controls
+ * 
+ * Configuration Sources (in priority order):
+ * 1. Environment variables (highest priority)
+ * 2. .env file in project root
+ * 3. Default values (fallback)
+ */
+
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -9,7 +29,9 @@ if (fs.existsSync(envPath)) {
   dotenv.config({ path: envPath });
 }
 
-// Helper to resolve tilde in paths
+/**
+ * Helper to resolve tilde (~) in file paths to user's home directory
+ */
 function resolvePath(filepath: string): string {
   if (filepath.startsWith('~')) {
     return path.join(os.homedir(), filepath.slice(1));
@@ -187,6 +209,10 @@ export const config: Config = {
   enableLogging: process.env.ENABLE_LOGGING === 'true',  // Off by default
 };
 
+/**
+ * Get weather-based stat modifiers for the pet.
+ * Weather affects pet mood and energy levels to create more dynamic interactions.
+ */
 export function getWeatherEffects() {
   const effects = {
     sunny: { happiness: 0.1, energy: 0.2 },

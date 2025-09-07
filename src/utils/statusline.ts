@@ -1,3 +1,17 @@
+/**
+ * statusline.ts - Utility functions for statusline component formatting
+ * 
+ * This module provides the core formatting and data processing functions used by
+ * statusline components. Each function handles a specific aspect of the statusline
+ * display: tokens, git info, costs, durations, directories, and model names.
+ * 
+ * Key Features:
+ * - Smart token counting from Claude Code transcript files
+ * - Git branch detection with semantic coloring
+ * - Cost and duration formatting with threshold-based colors
+ * - Consistent ANSI color scheme across all components
+ */
+
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -89,7 +103,8 @@ export function calculateTokens(sessionId?: string): TokenInfo {
 }
 
 /**
- * Find transcript file by session ID
+ * Find transcript file by session ID in Claude Code projects directory structure.
+ * Searches subdirectories for files matching the pattern: {sessionId}.jsonl
  */
 function findTranscriptFile(baseDir: string, sessionId: string): string | null {
   try {

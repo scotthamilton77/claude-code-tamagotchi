@@ -1,4 +1,20 @@
 #!/usr/bin/env bun
+
+/**
+ * index.ts - Enhanced main entry point for Claude Code Tamagotchi
+ * 
+ * This is the primary entry point that integrates the pet system with Claude Code's
+ * statusline. The main function handles stdin input from Claude Code, processes it
+ * through the pet engine, and outputs a formatted statusline.
+ * 
+ * Key Enhancements:
+ * - Modular statusline building with configurable components
+ * - Enhanced JSON input processing from Claude Code
+ * - Debug logging integration when enabled
+ * - Graceful error handling with fallback output
+ * - Session and transcript awareness for activity tracking
+ */
+
 import { PetEngine } from './engine/PetEngine';
 import { config } from './utils/config';
 import { StatuslineBuilder, StatuslineInput } from './utils/StatuslineBuilder';
@@ -47,7 +63,8 @@ export async function main() {
     const sessionId = input?.session_id;
     await engine.update(transcriptPath, sessionId);
     
-    // Prepare pet data for statusline builder
+    // Prepare pet data for statusline builder - this aggregates all pet state
+    // information needed by the various statusline components
     const petData = {
       display: engine.getDisplay(),
       stats: engine.getStats(),
@@ -56,7 +73,8 @@ export async function main() {
       feedbackIcon: engine.getFeedbackIcon()
     };
     
-    // Create statusline builder and build output
+    // Create statusline builder and build output - uses the new component system
+    // to assemble the final statusline from configured components
     const statuslineBuilder = new StatuslineBuilder();
     const output = statuslineBuilder.build(input || {
       hook_event_name: '',

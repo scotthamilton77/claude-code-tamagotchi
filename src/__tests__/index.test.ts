@@ -1,6 +1,13 @@
-import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
+/**
+ * index.test.ts - Integration tests for the enhanced main entry point
+ * 
+ * These tests verify that the main function properly handles various input scenarios
+ * from Claude Code, including TTY mode, JSON input parsing, error conditions, and
+ * basic output validation. The tests mock stdin and console.log to isolate the
+ * main function behavior.
+ */
 
-// Simple integration test for the main function
+import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
 describe('Index.ts Integration', () => {
   let originalStdin: any;
   let originalConsoleLog: any;

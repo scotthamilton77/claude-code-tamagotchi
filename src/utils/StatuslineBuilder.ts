@@ -1,3 +1,18 @@
+/**
+ * StatuslineBuilder.ts - Configurable statusline component system
+ * 
+ * This module provides a flexible, component-based system for building the Claude Code
+ * statusline display. Components are rendered in priority order and can be individually
+ * enabled/disabled via configuration.
+ * 
+ * Key Features:
+ * - Modular component architecture with priority-based ordering
+ * - Individual component enable/disable controls
+ * - Graceful error handling (failed components are skipped)
+ * - Automatic formatting with separator pipes
+ * - Integration with pet data and Claude Code session info
+ */
+
 import { config } from './config';
 import { 
   calculateTokens, 
@@ -35,6 +50,11 @@ export interface StatuslineComponent {
   priority: number; // Lower number = higher priority (rendered first)
 }
 
+/**
+ * StatuslineBuilder manages the collection of statusline components and renders them
+ * into the final statusline string. Components are sorted by priority and filtered
+ * by their enabled status before rendering.
+ */
 export class StatuslineBuilder {
   private components: StatuslineComponent[] = [];
   
@@ -42,6 +62,10 @@ export class StatuslineBuilder {
     this.initializeComponents();
   }
   
+  /**
+   * Initialize all available statusline components with their default configurations.
+   * Components are registered in priority order - lower priority numbers render first.
+   */
   private initializeComponents(): void {
     // Pet component
     this.components.push({
