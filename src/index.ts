@@ -5,7 +5,7 @@ import { StatuslineBuilder, StatuslineInput } from './utils/StatuslineBuilder';
 import * as path from 'path';
 import * as fs from 'fs';
 
-async function main() {
+export async function main() {
   try {
     // Log that we've been called with animation details (only if logging enabled)
     if (config.enableLogging) {
@@ -15,7 +15,7 @@ async function main() {
     }
     
     // Read input from stdin (Claude Code provides this)
-    let input: StatusLineInput | null = null;
+    let input: StatuslineInput | null = null;
     let cwd = process.cwd();
     
     // Check if we're receiving input from Claude Code
@@ -31,7 +31,7 @@ async function main() {
       if (inputStr.trim()) {
         try {
           input = JSON.parse(inputStr);
-          cwd = input.cwd || input.workspace?.current_dir || cwd;
+          cwd = input?.cwd || input?.workspace?.current_dir || cwd;
         } catch {
           // Not JSON input, ignore
         }

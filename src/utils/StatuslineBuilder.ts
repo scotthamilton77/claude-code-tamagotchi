@@ -6,11 +6,7 @@ import {
   formatDuration, 
   formatDirectory, 
   formatModel,
-  Colors,
-  TokenInfo,
-  GitInfo,
-  CostInfo,
-  DurationInfo
+  Colors
 } from './statusline';
 
 export interface StatuslineInput {
@@ -52,8 +48,8 @@ export class StatuslineBuilder {
       id: 'pet',
       enabled: config.showPet,
       priority: 1,
-      render: (input: StatuslineInput, petData: any) => {
-        return petData.display || '(◕ᴥ◕)';
+      render: (_input: StatuslineInput, petData: any) => {
+        return petData?.display || '(◕ᴥ◕)';
       }
     });
     
@@ -62,8 +58,8 @@ export class StatuslineBuilder {
       id: 'stats',
       enabled: config.showStats,
       priority: 2,
-      render: (input: StatuslineInput, petData: any) => {
-        return petData.stats || '';
+      render: (_input: StatuslineInput, petData: any) => {
+        return petData?.stats || '';
       }
     });
     
@@ -72,8 +68,8 @@ export class StatuslineBuilder {
       id: 'tokens',
       enabled: config.showTokens,
       priority: 3,
-      render: (input: StatuslineInput, petData: any) => {
-        const tokenInfo = calculateTokens(input.session_id);
+      render: (input: StatuslineInput, _petData: any) => {
+        const tokenInfo = calculateTokens(input?.session_id);
         return `${tokenInfo.color}${tokenInfo.display}${Colors.RESET}`;
       }
     });
@@ -83,8 +79,8 @@ export class StatuslineBuilder {
       id: 'context-percentage',
       enabled: config.showTokens,
       priority: 4,
-      render: (input: StatuslineInput, petData: any) => {
-        const tokenInfo = calculateTokens(input.session_id);
+      render: (input: StatuslineInput, _petData: any) => {
+        const tokenInfo = calculateTokens(input?.session_id);
         return `${Colors.CYAN}${tokenInfo.percentage}%${Colors.RESET}`;
       }
     });
@@ -94,8 +90,8 @@ export class StatuslineBuilder {
       id: 'directory',
       enabled: config.showDirectory,
       priority: 5,
-      render: (input: StatuslineInput, petData: any) => {
-        const cwd = input.cwd || input.workspace?.current_dir || process.cwd();
+      render: (input: StatuslineInput, _petData: any) => {
+        const cwd = input?.cwd || input?.workspace?.current_dir || process.cwd();
         return formatDirectory(cwd);
       }
     });
@@ -105,8 +101,8 @@ export class StatuslineBuilder {
       id: 'git',
       enabled: config.showGitBranch,
       priority: 6,
-      render: (input: StatuslineInput, petData: any) => {
-        const cwd = input.cwd || input.workspace?.current_dir || process.cwd();
+      render: (input: StatuslineInput, _petData: any) => {
+        const cwd = input?.cwd || input?.workspace?.current_dir || process.cwd();
         const gitInfo = getGitInfo(cwd);
         return gitInfo ? gitInfo.display : '';
       }
@@ -117,8 +113,8 @@ export class StatuslineBuilder {
       id: 'model',
       enabled: config.showModel,
       priority: 7,
-      render: (input: StatuslineInput, petData: any) => {
-        return input.model?.display_name ? formatModel(input.model.display_name) : '';
+      render: (input: StatuslineInput, _petData: any) => {
+        return input?.model?.display_name ? formatModel(input.model.display_name) : '';
       }
     });
     
@@ -127,8 +123,8 @@ export class StatuslineBuilder {
       id: 'cost',
       enabled: config.showCost,
       priority: 8,
-      render: (input: StatuslineInput, petData: any) => {
-        const rawCost = input.cost?.total_cost_usd;
+      render: (input: StatuslineInput, _petData: any) => {
+        const rawCost = input?.cost?.total_cost_usd || null;
         const costInfo = formatCost(rawCost);
         return costInfo.display;
       }
@@ -139,8 +135,8 @@ export class StatuslineBuilder {
       id: 'duration',
       enabled: config.showDuration,
       priority: 9,
-      render: (input: StatuslineInput, petData: any) => {
-        const rawDuration = input.cost?.total_duration_ms;
+      render: (input: StatuslineInput, _petData: any) => {
+        const rawDuration = input?.cost?.total_duration_ms || null;
         const durationInfo = formatDuration(rawDuration);
         return durationInfo.display;
       }
@@ -151,12 +147,12 @@ export class StatuslineBuilder {
       id: 'thoughts',
       enabled: config.showThoughts,
       priority: 10,
-      render: (input: StatuslineInput, petData: any) => {
+      render: (_input: StatuslineInput, petData: any) => {
         // Prioritize system messages over thoughts
-        if (petData.message) {
+        if (petData?.message) {
           return `💬 ${petData.message}`;
-        } else if (petData.thought) {
-          const icon = petData.feedbackIcon || '💭';
+        } else if (petData?.thought) {
+          const icon = petData?.feedbackIcon || '💭';
           return `${icon} ${petData.thought}`;
         }
         return '';

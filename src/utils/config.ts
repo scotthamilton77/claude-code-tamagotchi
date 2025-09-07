@@ -100,7 +100,9 @@ export interface Config {
 export const config: Config = {
   // Pet settings
   petName: process.env.PET_NAME || 'Buddy',
-  petType: (process.env.PET_TYPE as any) || 'dog',
+  petType: (['dog', 'cat', 'dragon', 'robot'].includes(process.env.PET_TYPE as string) 
+    ? process.env.PET_TYPE as 'dog' | 'cat' | 'dragon' | 'robot' 
+    : 'dog'),
   petColor: process.env.PET_COLOR || 'default',
   
   // Animation
@@ -110,8 +112,12 @@ export const config: Config = {
   walkingAnimationChance: parseFloat(process.env.WALKING_ANIMATION_CHANCE || '0.05'),
   
   // Environment
-  weather: (process.env.WEATHER as any) || 'sunny',
-  season: (process.env.SEASON as any) || 'spring',
+  weather: (['sunny', 'rainy', 'snowy', 'cloudy'].includes(process.env.WEATHER as string)
+    ? process.env.WEATHER as 'sunny' | 'rainy' | 'snowy' | 'cloudy'
+    : 'sunny'),
+  season: (['spring', 'summer', 'fall', 'winter'].includes(process.env.SEASON as string)
+    ? process.env.SEASON as 'spring' | 'summer' | 'fall' | 'winter'
+    : 'spring'),
   
   // Statusline Components (all configurable)
   showPet: process.env.PET_SHOW_PET !== 'false',
@@ -145,7 +151,9 @@ export const config: Config = {
   
   // Feedback system
   feedbackEnabled: process.env.PET_FEEDBACK_ENABLED === 'true',
-  feedbackMode: (process.env.PET_FEEDBACK_MODE as any) || 'full',
+  feedbackMode: (['full', 'passive', 'off'].includes(process.env.PET_FEEDBACK_MODE as string)
+    ? process.env.PET_FEEDBACK_MODE as 'full' | 'passive' | 'off'
+    : 'full'),
   feedbackCheckInterval: parseInt(process.env.PET_FEEDBACK_CHECK_INTERVAL || '5'),
   feedbackBatchSize: parseInt(process.env.PET_FEEDBACK_BATCH_SIZE || '10'),
   feedbackMinMessages: parseInt(process.env.PET_FEEDBACK_MIN_MESSAGES || '3'),
@@ -161,7 +169,9 @@ export const config: Config = {
   angryThreshold: parseInt(process.env.PET_ANGRY_THRESHOLD || '5'),
   furiousThreshold: parseInt(process.env.PET_FURIOUS_THRESHOLD || '8'),
   praiseBoost: parseInt(process.env.PET_PRAISE_BOOST || '10'),
-  feedbackIconStyle: (process.env.PET_FEEDBACK_ICON_STYLE as any) || 'emoji',
+  feedbackIconStyle: (['emoji', 'ascii', 'minimal'].includes(process.env.PET_FEEDBACK_ICON_STYLE as string)
+    ? process.env.PET_FEEDBACK_ICON_STYLE as 'emoji' | 'ascii' | 'minimal'
+    : 'emoji'),
   feedbackRemarkLength: parseInt(process.env.PET_FEEDBACK_REMARK_LENGTH || '50'),
   showComplianceScore: process.env.PET_SHOW_COMPLIANCE_SCORE === 'true',
   feedbackMaxHistory: parseInt(process.env.PET_FEEDBACK_MAX_HISTORY || '200'),
