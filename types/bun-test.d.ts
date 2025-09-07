@@ -1,4 +1,12 @@
-// Type declarations for Bun's built-in test runner
+/**
+ * Type declarations for Bun's built-in test runner
+ * 
+ * This ambient module declaration provides TypeScript types for the 'bun:test' module
+ * that is built into Bun but doesn't ship with its own TypeScript definitions.
+ * 
+ * Located in types/ directory (not src/) following standard TypeScript convention
+ * for ambient declarations and custom type definitions.
+ */
 
 declare module 'bun:test' {
   export function describe(name: string, fn: () => void): void;
